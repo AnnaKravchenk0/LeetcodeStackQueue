@@ -1,3 +1,6 @@
+'''
+Docstring for Implement_Queue_using_Stacks.solution
+'''
 class Node:
     '''
     Docstring for Node
@@ -6,6 +9,44 @@ class Node:
         self.value = value
         self.next = None
 
+class Stack:
+    '''
+    Docstring for Stack
+    '''
+    def __init__(self):
+        self.top = None
+
+    def push(self, value):
+        '''
+        Docstring for push
+        '''
+        node = Node(value)
+        node.next = self.top
+        self.top = node
+
+    def pop(self):
+        '''
+        Docstring for pop
+        '''
+        node_val = self.top.value
+        self.top = self.top.next
+        return node_val
+
+
+    def peek(self):
+        '''
+        Docstring for peek
+        '''
+        return self.top.value
+
+    def empty(self):
+        '''
+        Docstring for empty
+        '''
+        return not self.top
+
+
+
 
 class MyQueue:
     '''
@@ -13,46 +54,43 @@ class MyQueue:
     '''
 
     def __init__(self):
-        self.head = None
-        self.tail = None
+        self.in_ = Stack()
+        self.out_ = Stack()
 
     def push(self, x: int) -> None:
         '''
         Docstring for push
         '''
-        node = Node(x)
-        if not self.head:
-            self.tail = node
-            self.head = node
-        else:
-            self.tail.next = node
-            self.tail = node
+        self.in_.push(x)
 
 
     def pop(self) -> int:
         '''
         Docstring for pop
         '''
-        node = self.head
-        self.head = self.head.next
+        if self.out_.empty():
+            while not self.in_.empty():
+                self.out_.push(self.in_.pop())
 
-        if not self.head:
-            self.tail = None
-        return node.value
+
+        return self.out_.pop()
 
     def peek(self) -> int:
         '''
         Docstring for peek
         '''
-        return self.head.value
+        if self.out_.empty():
+            while not self.in_.empty():
+                self.out_.push(self.in_.pop())
+
+
+        return self.out_.peek()
 
     def empty(self) -> bool:
         '''
         Docstring for empty
         '''
-        if self.head:
-            return False
-        return True
+        return self.in_.empty() and self.out_.empty()
 
 
 # Your MyQueue object will be instantiated and called as such:
